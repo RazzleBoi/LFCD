@@ -1,0 +1,14 @@
+Compute the average of n numbers
+
+$
+	declare int n, crt_elem
+
+	for(int i=0; i<n; i++) do
+		read crt_elem
+		avg += crt_elem
+	end
+
+	avg = avg / n
+
+	return avg
+$
