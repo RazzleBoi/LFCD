@@ -1,17 +1,15 @@
 Alphabet:
 a. Upper (A-Z) and lower case letters (a-z) of the English alphabet
 
-       b. Underline character '_';
-
-       c. Decimal digits (0-9);
+b. Decimal digits (0-9);
 
 Lexic:
 
       a.Special symbols, representing:
 
-        - operators = + - * / // % & |
+        - operators = + - * / % & | !
 
-        - logiacl operaotrs && ||
+        - logical operators && ||
 
         - relation < > <= == >= !=
 
@@ -37,22 +35,16 @@ Lexic:
 
 1.integer - rule:
 
-      noconst = "+"nonzero{no} | "-"nonzero{no} | nonzero{no}
+      noconst = ["+"| "-"]nonzero{digit} | zero
 
-      no = nonzero{no} | zero
+2.string
 
-2.character
+      string="""{character}"""
 
-    character:='letter' | 'digit' | ''
+      character= letter | digit
+3.bool
 
-3.string
-
-      constchar="string"
-
-      string=char{string}
-
-      char=letter|digit| ""
-
+      bool = "True" | "False"
 
 token.in
 =
@@ -107,39 +99,41 @@ Syntax.txt
 
 program =  "$" cmpdstmt "$"
 
-declarationstmt = "DECLARE" type (IDENTIFIER | arraydecl){","(IDENTIFIER | array)}
+declarationstmt = "DECLARE" type (IDENTIFIER | array){","(IDENTIFIER | array)}
 
-type = "BOOL" | "CHAR" | "INT" | "FLOAT" | "STRING"
+type = "BOOL" | "INT" | "STRING"
 
-array = "LIST" IDENTIFIER"[" number "] 
+array = "LIST" IDENTIFIER"[" noconst "]"
 
 cmpdstmt = "{" stmtlist "}"
 
-stmtlist = stmt | stmt ";" stmtlist
+stmtlist = stmt{";"} | stmt ";" stmtlist
 
 stmt = simplstmt | structstmt
 
 simplstmt = assignstmt | iostmt | declarationstmt
 
-assignstmt = IDENTIFIER "=" expression
+address = IDENTIFIER | address"[" expression "]"
 
-expression = expression operator term | term
+assignstmt = address "=" expression
 
-term = term operator factor | factor
+expression = expression ("+" | "-" | "|" | "||") term | term
 
-factor = "(" expression ")" | IDENTIFIER
+term = term ("*" | "%" | "/" | "&" | "&&" ) factor | factor
 
-iostmt = ("SCAN" | "PRINT") IDENTIFIER{","IDENTIFIER}
+factor = "(" expression ")" | address | condition | constant
+
+constant = noconst | string | bool
+
+iostmt = ("SCAN" | "PRINT") address{","address}
 
 structstmt = cmpdstmt | ifstmt | whilestmt
 
-ifstmt = "IF" condition "THEN" stmt ["ELSE" stmt]
+ifstmt = "IF" expression "THEN" cmpdstmt ["ELSE" cmpdstmt]
 
-whilestmt = "WHILE" condition "DO" stmt
+whilestmt = "WHILE" expression "DO" cmpdstmt
 
-condition = expression RELATION expression |conditon logicalop condition
+condition = expression RELATION expression | "!"(condition)
 
 RELATION = "<" | "<=" | "==" | "<>" | ">=" | ">"
-
-logicalop = "&&" | "||"
 
