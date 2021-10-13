@@ -19,7 +19,7 @@ Lexic:
 
       b.identifiers
 
-        - a sequence of letters and  digits, such that the first character is a letter; the rule is:
+        - a sequence of letters and  digits, such that the first characters are letter, and we have digits only after all the letters; the rule is:
 
             identifier = letter | letter{letter}{digit}
 
