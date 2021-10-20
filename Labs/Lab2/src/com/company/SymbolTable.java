@@ -49,4 +49,8 @@ public class SymbolTable {
         return search(root.getLeft(), key);
     }
 
+    @Override
+    public String toString() {
+        return root.toString();
+    }
 }

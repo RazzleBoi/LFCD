@@ -1,0 +1,10 @@
+$
+	declare int a, b, gc_)d;
+	read a,b;
+	while b != 0 {
+        gcd = b;
+        b = a % b;
+        a = gcd;
+    }
+    return a;
+$

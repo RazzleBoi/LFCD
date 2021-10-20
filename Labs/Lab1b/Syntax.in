@@ -1,0 +1,40 @@
+ 2. Syntax:
+
+
+program =  "$" cmpdstmt "$"
+
+declarationstmt = "DECLARE" type (IDENTIFIER | arraydecl){","(IDENTIFIER | array)}
+
+type = "BOOL" | "CHAR" | "INT" | "FLOAT" | "STRING"
+
+array = "LIST" IDENTIFIER"[" number "] 
+
+cmpdstmt = "{" stmtlist "}"
+
+stmtlist = stmt | stmt ";" stmtlist
+
+stmt = simplstmt | structstmt
+
+simplstmt = assignstmt | iostmt | declarationstmt
+
+assignstmt = IDENTIFIER "=" expression
+
+expression = expression operator term | term
+
+term = term operator factor | factor
+
+factor = "(" expression ")" | IDENTIFIER
+
+iostmt = ("SCAN" | "PRINT") IDENTIFIER{","IDENTIFIER}
+
+structstmt = cmpdstmt | ifstmt | whilestmt
+
+ifstmt = "IF" condition "THEN" stmt ["ELSE" stmt]
+
+whilestmt = "WHILE" condition "DO" stmt
+
+condition = expression RELATION expression |conditon logicalop condition
+
+RELATION = "<" | "<=" | "==" | "<>" | ">=" | ">"
+
+logicalop = "&&" | "||"

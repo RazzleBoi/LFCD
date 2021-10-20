@@ -90,6 +90,7 @@ true
 var 
 while 
 print
+declare
 
 
 Syntax.txt
