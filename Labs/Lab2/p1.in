@@ -1,0 +1,12 @@
+$
+  	declare int a,b,c
+    read a,b,c
+  	declare int avg
+  	avg=(a+b+c)/3
+
+  	when avg<=0 do
+  		avg=-avg
+  	end
+  	
+  	return avg
+$

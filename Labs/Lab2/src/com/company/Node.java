@@ -44,4 +44,14 @@ public class Node {
     public void setRight(Node right) {
         this.right = right;
     }
+
+    @Override
+    public String toString() {
+        return toStringHelper("");
+    }
+
+    public String toStringHelper(String prefix) {
+        return (left != null ? left.toStringHelper(prefix + "\t") : "") + prefix + key + ", " + val + "\n" + (right != null ? right.toStringHelper(prefix + "\t") : "");
+    }
+
 }
