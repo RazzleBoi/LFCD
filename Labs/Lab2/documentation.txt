@@ -12,3 +12,7 @@ tokenizes code input, then for each token:
     - if valid identifier or constant, adds entries to sl and pif;
     - otherwise, prints error;
 if no errors occur, write sl and pif in output files;
+
+regex:
+    - one regex pattern for identifiers, strings, and numbers
+    - one regex that matches all separators, which we use to tokenize

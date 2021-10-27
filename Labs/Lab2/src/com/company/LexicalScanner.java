@@ -33,7 +33,7 @@ public class LexicalScanner {
         this.reservedtokens = new LinkedList<>();
         this.identifierPattern = Pattern.compile("^[A-Za-z]+[0-9]*$");
         this.stringPattern = Pattern.compile("^\"[A-Za-z]+\"$");
-        this.intPattern = Pattern.compile("^[1-9]+[0-9]*$");
+        this.intPattern = Pattern.compile("^[1-9]+[0-9]$");
     }
 
     public void parse() {
@@ -65,7 +65,7 @@ public class LexicalScanner {
                 else if (identifierPattern.matcher(token).matches()) {
                     Integer index = symbolTable.insert(token);
                     genPIF("identifier", index);
-                } else if (stringPattern.matcher(token).matches() && intPattern.matcher(token).matches()) {
+                } else if (stringPattern.matcher(token).matches() || intPattern.matcher(token).matches()) {
                     Integer index = symbolTable.insert(token);
                     genPIF("const", index);
                 } else
