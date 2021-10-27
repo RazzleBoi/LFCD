@@ -2,7 +2,7 @@ $
   	declare int a,b,c
     read a,b,c
   	declare int avg
-  	avg=(a+b+c)/3
+  	avg=(a+b+c)/10
 
   	when avg<=0 do
   		avg=-avg

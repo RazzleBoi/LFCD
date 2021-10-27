@@ -7,5 +7,5 @@ $
         a = gcd
     end
 
-    return a
+    print a
 $
