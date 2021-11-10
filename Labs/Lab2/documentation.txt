@@ -1,3 +1,4 @@
+https://github.com/RazzleBoi/LFCD
 Lexical analyzer
 input:
     - token.in - all reserved words, operators, and separators;
@@ -16,3 +17,26 @@ if no errors occur, write sl and pif in output files;
 regex:
     - one regex pattern for identifiers, strings, and numbers
     - one regex that matches all separators, which we use to tokenize
+
+finite automaton model which:
+    -provides a cli for:
+        -displaying info about the automaton
+        -checking if a sequence is accepted by the automaton (DFA only)
+    -read automaton info from file:
+        -input must follow specification:
+            input = stateDef initialDef alphabetDef transitionDef finalDef
+            stateDef = "~states" stateList
+            stateList = state | state "," stateList
+            state = upperCase | upperCase state
+            initialDef = "~initial" state
+            alphabetDet = "~alpha" characterList
+            characterList = character | character "," characterList
+            transitionDef = "~transition" transitionList
+            transitionList = transition | transition transitionList
+            transition = state "-" characterList "-" state
+            finalDel = "~final" stateList
+            character = lowerCase | upperCase | digit | special
+            lowerCase = "a", "b", ..., "z"
+            upperCase = "A", "B", ..., "Z"
+            digit = "0", "1", ..., "9"
+            special = """
