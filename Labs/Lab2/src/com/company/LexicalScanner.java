@@ -33,7 +33,7 @@ public class LexicalScanner {
         this.reservedtokens = new LinkedList<>();
         this.identifierPattern = Pattern.compile("^[A-Za-z]+[0-9]*$");
         this.stringPattern = Pattern.compile("^\"[A-Za-z]+\"$");
-        this.intPattern = Pattern.compile("^[1-9]+[0-9]$");
+        this.intPattern = Pattern.compile("^[1-9]+[0-9]*$");
     }
 
     public void parse() {
@@ -55,6 +55,10 @@ public class LexicalScanner {
             e.printStackTrace();
             return;
         }
+        FiniteAutomaton identifierFA = new FiniteAutomaton(new File("FAidentifier.txt"));
+        identifierFA.load();
+        FiniteAutomaton integerFA = new FiniteAutomaton(new File("FAinteger.txt"));
+        integerFA.load();
         while (myReader.hasNextLine()) {
             String line = myReader.nextLine().replaceAll("(<=|==|!=|>=|&&|\\|\\||\\[|\\(|\\{|}|]|\\)|\\+|-|/|&|=|\\*|\\$|\\||<|>|;|,)", " $1 ");
             List<String> tokens = Arrays.asList(line.split("\\s")).stream().filter(p -> p != "").collect(Collectors.toList());
@@ -62,10 +66,11 @@ public class LexicalScanner {
             for(String token : tokens) {
                 if (reservedtokens.contains(token))
                     genPIF(token, 0);
-                else if (identifierPattern.matcher(token).matches()) {
+                else if (identifierFA.check("", null, token)) {  //identifierPattern.matcher(token).matches()
                     Integer index = symbolTable.insert(token);
                     genPIF("identifier", index);
-                } else if (stringPattern.matcher(token).matches() || intPattern.matcher(token).matches()) {
+                } else if (stringPattern.matcher(token).matches() || integerFA.check("", null, token)) {  //intPattern.matcher(token).matches()
+                    System.out.println(integerFA.check("", null, token));
                     Integer index = symbolTable.insert(token);
                     genPIF("const", index);
                 } else

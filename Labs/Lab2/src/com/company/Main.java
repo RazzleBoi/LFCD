@@ -1,7 +1,6 @@
 package com.company;
 
 import java.io.File;
-import java.util.Scanner;
 
 public class Main {
 
@@ -12,7 +11,17 @@ public class Main {
         File STout = new File("ST.out");
         SymbolTable symbolTable = new SymbolTable(null);
         LexicalScanner ls = new LexicalScanner(input, tokensFile, PIFfile, STout, symbolTable);
-        ls.parse();
+
+        FiniteAutomaton famenu = new FiniteAutomaton(new File("FAidentifier.txt"));
+        famenu.run();
+        famenu.load();
+        System.out.println(famenu.check("",'q', "gc_"));
+        System.out.println(famenu.check("",'q', "qwerty12"));
+        System.out.println(famenu.check("",'q', "1wqw"));
+        System.out.println(famenu.check("",'q', "a"));
+        System.out.println(famenu.check("",'q', "1"));
+
+//        ls.parse();
 
     }
 }

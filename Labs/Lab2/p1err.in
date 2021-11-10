@@ -1,5 +1,5 @@
 $
-	declare int 1a, b, gc_)d;
+	declare int a1aa, b, gc_)d;
 	scan a,b;
 	while b != 0 {
         gcd = b;
