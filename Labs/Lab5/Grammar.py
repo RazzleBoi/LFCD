@@ -1,57 +1,125 @@
+import copy
+
 
 class Grammar:
-    
-    def __init__(self) -> None:
-        self.N = None
-        self.E = None
-        self.P = None
-        self.S = None
-        self.is_cfg = True
+    def __init__(self, givenFileName):
+        self.fileName = givenFileName
+        self.__non_terminals = []
+        self.__terminals = []
+        self.__initialNonTerminal = ""
+        self.__productions = {}
+        self.readInputFromFile()
 
-    def read_from_file(self, filename):
-        with open(filename) as file:
-            self.N = self.parse_line(file.readline())
-            self.E = self.parse_line(file.readline())
-            self.S = file.readline().split('=')[1].strip()
-            self.P = self.parse_productions(self.parse_line(''.join([line for line in file])))
+    def getNonTerminals(self):
+        return self.__non_terminals
 
-    def parse_line(self, line):
-        return [value.strip() for value in line.strip().split('=')[1].strip()[1:-1].strip().split(',')]
-    
+    def getProductions(self):
+        return copy.deepcopy(self.__productions)
 
-    def parse_productions(self, rules):
+    def getTerminals(self):
+        return self.__terminals
 
-        result = []
+    def getInitialNonTerminal(self):
+        return self.__initialNonTerminal
 
-        for rule in rules:
-            
-            left_hand_side, right_hand_side = rule.split('->')
-            left_hand_side = left_hand_side.strip()
-            right_hand_side = [value.strip() for value in right_hand_side.split('|')]
+    def readInitialNonTerminal(self, givenCurrentLine, givenFileReader):
+        self.__initialNonTerminal = givenCurrentLine[0:-1]
+        currentLine = givenFileReader.readline()
+        return currentLine, givenFileReader
 
-            for value in right_hand_side:
-                result.append((left_hand_side, value))
+    def readTerminals(self, givenCurrentLine, givenFileReader):
+        self.__terminals = givenCurrentLine.split(" ")
+        self.__terminals[-1] = self.__terminals[-1][0:-1]
+        currentLine = givenFileReader.readline()
+        return currentLine, givenFileReader
 
-        return result
+    def readNonTerminals(self, givenCurrentLine, givenFileReader):
+        self.__non_terminals = givenCurrentLine.split(" ")
+        self.__non_terminals[-1] = self.__non_terminals[-1][0:-1]
+        currentLine = givenFileReader.readline()
+        return currentLine, givenFileReader
 
-    def get_productions_for_nonterminal(self, non_terminal):
-        if not self.is_non_terminal(non_terminal):
-            self.is_cfg = False
-            raise Exception('It is non-terminal, so no CFG')
+    def readProductions(self, givenCurrentLine, givenFileReader):
 
-        return [production for production in self.P if production[0] == non_terminal]
+        existingProductions = {}
+        while givenCurrentLine:
+            if givenCurrentLine == '\n':
+                return givenCurrentLine, givenFileReader
 
-    def is_non_terminal(self, value):
-        return value in self.N
+            productionStart = givenCurrentLine.split("->")[0].strip()
+            productionEnd = list(givenCurrentLine.split("->")[1].strip().split(" "))
 
-    def checkCFG(self):
-        for prod in self.P:
-            s = prod[0]
-            if not self.is_non_terminal(s):
-                self.is_cfg = False
+            if productionStart not in existingProductions:
+                existingProductions[productionStart] = 1
 
-    def __str__(self):
-        return 'N = { ' + ', '.join(self.N) + ' }\n' \
-        + 'E = { ' + ', '.join(self.E) + ' }\n' \
-        + 'P = { ' + ', '.join([' => '.join(prod) for prod in self.P]) + ' }\n' \
-        + 'S = ' + str(self.S) + '\n'
+            self.__productions[(productionStart, existingProductions[productionStart])] = productionEnd
+            existingProductions[productionStart] += 1
+
+            givenCurrentLine = givenFileReader.readline()
+
+        return givenCurrentLine, givenFileReader
+
+    def readInputFromFile(self):
+        with open(self.fileName, 'r') as fileReader:
+            currentLine = fileReader.readline()
+            lineNumber = 1
+            switchCase = {
+                1: self.readInitialNonTerminal,
+                2: self.readNonTerminals,
+                3: self.readTerminals,
+                4: self.readProductions
+            }
+            while currentLine:
+                if lineNumber not in switchCase:
+                    print("Error: invalid input. Line - ", lineNumber)
+                currentReadFunction = switchCase[lineNumber]
+                currentLine, fileReader = currentReadFunction(currentLine, fileReader)
+                lineNumber += 1
+
+    def printInitialNonTerminal(self):
+        print("Initial non terminal: " + self.__initialNonTerminal)
+
+    def printAllNonTerminals(self):
+        print("Nonterminals: ", end="")
+        for nonTerminal in self.__non_terminals:
+            print(nonTerminal + " ", end="")
+        print()
+
+    def printNonTerminal(self, givenTerminal):
+        print("Nonterminal " + str(givenTerminal) + ":")
+
+        for currentProduction in self.__productions:
+            if currentProduction[0] == givenTerminal:
+                print(currentProduction[0] + str(currentProduction[1]) + " -> " +
+                      self.__productions[currentProduction])
+
+        print()
+
+    def printTerminals(self):
+        print("Terminals: ", end="")
+        for terminal in self.__terminals:
+            print(terminal + " ", end="")
+        print()
+
+    def printProductions(self):
+        print("Productions:")
+        for currentProduction in self.__productions:
+            print(currentProduction[0] + str(currentProduction[1]) + " -> " +
+                  str(self.__productions[currentProduction]))
+        print()
+
+    def printAll(self):
+        self.printInitialNonTerminal()
+        self.printAllNonTerminals()
+        self.printTerminals()
+        self.printProductions()
+
+    def printOneNonTerminal(self):
+        inputNonTerminal = input("Enter one non terminal:")
+        self.printNonTerminal(inputNonTerminal)
+
+# grammar = Grammar("g1.txt")
+
+# grammar.printAll()
+# print(grammar.productions)
+# grammar.printOneNonTerminal()

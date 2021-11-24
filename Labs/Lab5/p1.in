@@ -1,0 +1,16 @@
+$
+  	declare int a;
+  	declare int b;
+  	declare int c;
+    read a;
+    read b;
+    read c;
+  	declare int avg;
+  	avg = ( a + b + c ) / 10;
+
+  	when avg<=0 do
+  		avg=-avg
+  	end
+
+  	return avg
+$
