@@ -1,4 +1,4 @@
-from Parser import Parser, runParser, runG2
+from Parser import Parser, runParser, runG2, runG1
 from Grammar import Grammar
 
 if __name__ == "__main__":
@@ -6,5 +6,4 @@ if __name__ == "__main__":
     # grammar.printAll()
     # grammar.printOneNonTerminal()
     parser = Parser("G2.txt", "out2.txt")
-    # parser.runAlgorithm(['a', 'a', 'c', 'b', 'c'])
-    runG2()
+    runG1(['a', 'a', 'c', 'b', 'c'])

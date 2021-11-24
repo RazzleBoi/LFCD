@@ -185,15 +185,6 @@ def generateInputFromPIF(givenFileName):
         while currentLine:
             currentLine.strip("[]")
             element = currentLine.split(", ")[0].strip("[]'")
-            # index = 0
-            # while index < len(element) and element[index] != '\'':
-            #     index += 1
-            #
-            # element = element[index + 1:]
-            # index = len(element) - 1
-            # while index >= 0 and element[index] != '\'':
-            #     index -= 1
-            # element = element[:index]
             output.append(element)
             currentLine = filePath.readline()
 
