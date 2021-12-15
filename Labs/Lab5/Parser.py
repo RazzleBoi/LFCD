@@ -176,6 +176,7 @@ class Parser:
             print("Finished")
             self.parserOutput.setResultAndCalculateProductionString(self.workingStack, self.derivationsString)
             self.parserOutput.writeRepresentationsToFile("success")
+            self.parserOutput.printDerivationString()
 
 
 def generateInputFromPIF(givenFileName):

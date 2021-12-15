@@ -1,3 +1,41 @@
 +https://github.com/RazzleBoi/LFCD/tree/master/Labs/Lab5
 
 Claudiu Pana + Tudor Muresan
+
+Documentation:
+
+Grammar.py:
+    holds :     - terminals(list of strings)
+                - nonterminals(list of strings)
+                - initalNonTerminal(string)
+                - productions(dict of string:string)
+
+    methods for:- reading and printing all attributes from/to a file
+
+Parser.py:(recursive descendant)
+    holds:      - current_state char
+                - index integer : current index in sequence
+                - epsilon_count integer : number of symbols that end ip as epsilon(dont afffect the sequence length but affect the index)
+                - working_stack list containing strings, tuples and other lists corresponding to terminals, nonterminals and production results
+                - input_stack list containing strings, tuples and other lists corresponding to terminals, nonterminals and production results
+
+    methods for:-check if the length of the given word is equal to the length given by the sequence
+                -success sets state success
+                -error sets state error
+                -momentaryInsuccess sets state back
+                -expand takes a nonterminal from the inputstack,replaces it with a production and puts it in the working stack
+                -advance takes a terminal and checks it against de current index element of the seq, puts it in the working_stack if matching
+                    goes into "mi" otherwise
+                -back takes the last element from the workingstack puts it in the the inputstack
+                -anotherTry: takes the last elem from working stack(called when that is a nonterminal) and tries to replace it with its next production
+                -runAlgorithm: runs the RD algorithm
+
+ParserOutput.py:
+    holds:      - output = []
+                - fileName = givenOutputFileName
+                - productionString = ""
+                - derivations = ""
+                - derivationString = ""
+                - grammar  Grammar.py
+    methods:    -computes the productionString
+                -computes the DerivationString

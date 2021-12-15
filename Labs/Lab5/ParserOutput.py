@@ -1,3 +1,6 @@
+import copy
+
+
 class ParserOutput:
     def __init__(self, givenOutputFileName, grammar):
         self.__output = []
@@ -18,11 +21,18 @@ class ParserOutput:
         self.setDerivationsResult(givenDerivations)
         self.calculateProductionString()
         self.calculateDerivationString()
+        # print(str(self.__output))
+    #     self.calculateTable()
+    #
+    # def calculateTable(self):
+    #     pass
 
     def calculateDerivationString(self):
         result = []
+        output_copy = copy.deepcopy(self.__output)
         currentList = [self.__output.pop(0)]
         headList = []
+        print(self.grammar.getProductions())
         while self.__output:
             index = 0
             elementsAdded = 0
@@ -53,13 +63,16 @@ class ParserOutput:
                 index += 1
             if added == 0 and self.__output:
                 currentList = [headList.pop(0)]
-
+        print(currentList)
+        print(result)
         steps = len(result) - 1
         currentStep = 0
         start = result[0].pop(0)
         self.derivationString += start[0] + str(start[1]) + " "
         currentList = result[0]
         addedTuples = 1
+        # tableIndex = 1
+        # table = [[tableIndex, start[0], 0, 0]]
         while currentStep < steps:
             self.derivationString += "=> "
             newList = []
@@ -76,6 +89,7 @@ class ParserOutput:
                 index += 1
             currentList = newList
             currentStep += 1
+        self.__output = output_copy
 
     def calculateProductionString(self):
         for element in self.__output:
@@ -96,4 +110,5 @@ class ParserOutput:
                 "Production string: " + self.productionString + "\n")
             filePath.write("Derivation string: " + self.derivationString + "\n")
             filePath.write("Derivations: " + self.derivations)
+
 
